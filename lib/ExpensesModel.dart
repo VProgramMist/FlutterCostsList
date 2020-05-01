@@ -49,11 +49,19 @@ class ExpensesModel extends Model {
 
   String GetText(int index) {
     var e = _items[index];
-    return e.name + " for " + e.price.toString() + "\n" + e.date.toString();
+    return e.name + ": " + e.price.toString() + " руб.\n" + e.date.toString();
   }
 
   String GetTotalCost() {
-    return "Total costs: " + _total.toString();
+    return "Сумма покупок: " + _total.toString() + " руб.";
+  }
+
+  String GetPrice(int index) {
+    return _items[index].price.toString();
+  }
+
+  String GetName(int index) {
+    return _items[index].name;
   }
 
   void RemoveAt(int index, int id) {
@@ -66,6 +74,13 @@ class ExpensesModel extends Model {
 
   Future<void> AddExpense(String name, double price) {
     Future<void> future = _database.addExpense(name, price, DateTime.now());
+    future.then((_) {
+      Load();
+    });
+  }
+
+  Future<void> EditExpense(int id, String name, double price) {
+    Future<void> future = _database.editExpense(id, name, price, DateTime.now());
     future.then((_) {
       Load();
     });

@@ -2,19 +2,21 @@ import 'package:expenseslog/ExpensesModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class _AddExpenseState extends State<AddExpense> {
+class _EditExpenseState extends State<EditExpense> {
   double _price;
+  int _index;
   String _name;
   ExpensesModel _model;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  _AddExpenseState(this._model);
+  _EditExpenseState(this._model, this._index);
 
   @override
   Widget build(BuildContext context) {
+    _name = _model.GetName(_index);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Добавить покупку"),
+        title: Text("Изменить покупку"),
       ),
       body: Padding(
         padding: EdgeInsets.all(3.0),
@@ -24,7 +26,7 @@ class _AddExpenseState extends State<AddExpense> {
             children: [
               TextFormField(
                 autovalidate: true,
-                initialValue: "0",
+                initialValue: _model.GetPrice(_index),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (double.tryParse(value) != null) {
@@ -37,6 +39,7 @@ class _AddExpenseState extends State<AddExpense> {
                 },
               ),
               TextFormField(
+                initialValue: _name,
                 onSaved: (value) {
                   _name = value;
                 },
@@ -47,12 +50,12 @@ class _AddExpenseState extends State<AddExpense> {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
 
-                    _model.AddExpense(_name, _price);
+                    _model.EditExpense(int.parse(_model.GetKey(_index)), _name, _price);
 
                     Navigator.pop(context);
                   }
                 },
-                child: Text("Добавить"),
+                child: Text("Сохранить"),
               )
             ],
           ),
@@ -62,11 +65,12 @@ class _AddExpenseState extends State<AddExpense> {
   }
 }
 
-class AddExpense extends StatefulWidget {
+class EditExpense extends StatefulWidget {
   final ExpensesModel _model;
+  final int _index;
 
-  AddExpense(this._model);
+  EditExpense(this._model, this._index);
 
   @override
-  State<StatefulWidget> createState() => _AddExpenseState(_model);
+  State<StatefulWidget> createState() => _EditExpenseState(_model, _index);
 }

@@ -64,6 +64,13 @@ class ExpanseDB {
         "INSERT INTO Expenses (name, date, price) VALUES (\"$name\", \"$dateAsString\", $price)");
   }
 
+  Future<void> editExpense(int id, String name, double price, DateTime dateTime) async {
+    Database db = await database;
+    var dateAsString = dateTime.toString();
+    await db.rawUpdate(
+        "UPDATE Expenses SET name = \"$name\", date = \"$dateAsString\", price = $price WHERE id = $id");
+  }
+
   Future<void> removeExpense(int id) async {
     Database db = await database;
     await db.rawDelete("DELETE FROM Expenses WHERE id = $id");

@@ -1,11 +1,9 @@
-import 'package:expenseslog/AddExpanse.dart';
+import 'package:expenseslog/AddEditExpanse.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
 import 'package:expenseslog/ExpensesModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-
-import 'EditExpanse.dart';
 
 void main() => runApp(MyApp());
 
@@ -114,6 +112,7 @@ class MyHomePage extends StatelessWidget {
                                     Scaffold.of(context).showSnackBar(SnackBar(
                                       content: Text("Deleted record $index"),
                                     ));
+                                    model.Load();
                                   },
                                   child: const Text("DELETE")),
                             ],
@@ -127,7 +126,7 @@ class MyHomePage extends StatelessWidget {
                       trailing: Icon(Icons.delete),
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return EditExpense(model, index);
+                          return AddEditExpense(model, index, true);
                         }));
                       },
                     ),
@@ -141,7 +140,7 @@ class MyHomePage extends StatelessWidget {
           builder: (context, child, model) => FloatingActionButton(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AddExpense(model);
+                return AddEditExpense(model, 0, false);
               }));
             },
             child: Icon(Icons.add),
